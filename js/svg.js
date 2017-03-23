@@ -1,7 +1,3 @@
-
-
-d3.json("data.json", function(data) {
-
 var w=800, h=600 , pad=250;
 
 var svg = d3.select("div#viz").append("svg").attr("width",w).attr("height",h);
@@ -14,10 +10,13 @@ function getRandomColor() {
 	}
     return color;
 }
+var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
+d3.json("data.json", function(data) {
+
 
 var max = d3.max(data, function(d) { return d.poblacion; });
 var escala = d3.scaleLinear().domain([0,max]).range([0,w-pad]);
-var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
 svg.selectAll("text").data(data).enter().append("text")
   .attr("x",240)
@@ -28,9 +27,14 @@ svg.selectAll("text").data(data).enter().append("text")
 svg.selectAll("rect").data(data).enter().append("rect")
   .attr("x",250)
   .attr("y", function(d,i) {return (i*20);} )
+  .transition()
+  .duration(1000)
+  .delay(100)
+  .ease(d3.easeLinear)
   .attr("width", function(d,i) { return escala(d.poblacion);} )
-  .attr("height",18)
-  .on("mouseover", function(d){
+  .attr("height",18);
+
+  svg.selectAll("rect").on("mouseover", function(d){
             tooltip
               .style("left", d3.event.pageX + "px")
               .style("top", d3.event.pageY + "px")
