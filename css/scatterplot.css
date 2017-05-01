@@ -1,0 +1,7 @@
+circle[class="noselect"] {
+      fill: #999;
+    }
+
+    circle[class="selected"] {
+      fill: steelblue;
+    }
